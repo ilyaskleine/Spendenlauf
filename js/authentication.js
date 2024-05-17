@@ -23,7 +23,7 @@ function adminLogin(password, callback) {
             }
         })
     } else {
-        callback('Unauthorized!', null)
+        callback('Falsches Passwort.', null)
     }
 }
 
