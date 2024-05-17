@@ -11,8 +11,8 @@ const pool = mysql.createPool({
     socketPath: '/var/run/mysqld/mysqld.sock'
 });
 
-function getAllRunners(callback) {
-    pool.query("SELECT * FROM laeufer;", function (err, results) {
+function getJahrgaenge(callback) {
+    pool.query("SELECT * FROM jahrgang;", function (err, results) {
         if (err) return callback(err, null)
         callback(err, results)
     })
@@ -31,7 +31,8 @@ function checkToken(token, callback) {
 }
 
 module.exports = {
-    getAllRunners: getAllRunners,
+    getJahrgaenge: getJahrgaenge,
+    
     saveToken: saveToken,
     checkToken: checkToken
 }

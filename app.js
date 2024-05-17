@@ -1,45 +1,30 @@
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
 
 var db = require('./js/database')
 var auth = require('./js/authentication');
-const { nextTick } = require('process');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.static('public'))
 
+// ----------- HTML Routen -----------
+
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/index.html'))
+  res.sendFile(path.join(__dirname, '/html/index.html'))
 })
 
-app.get('/users', (req, res) => {
-  db.getAllRunners((err, results) => {
-    if (err) {
-      res.status(404).json({ message: err})
-    }
-    else {
-      console.log(results)
-      res.json({results})
-    }
-
-  })
+app.get('/login', (req, res) => {
+  if (req.cookies.token) return res.redirect('/');
+  res.sendFile(path.join(__dirname, '/html/login.html'))
 })
 
-app.get('/login/:pwd', (req, res) => {
-  auth.adminLogin(req.params.pwd, (err, token) => {
-    if (err) {
-      res.status(401).json({message: err})
-    } else {
-      res.cookie('token', token)
-      res.json({token: token})
-    }
-  })
-})
-
-app.use('/admin', (req, res, next) => {
+function checkAdmin(req, res, next) {
   if (req.cookies.token) {
     auth.authenticate(req.cookies.token, (err, granted) => {
       if (err) {
@@ -51,16 +36,49 @@ app.use('/admin', (req, res, next) => {
       }
     })
   } else {
-    res.redirect("/login/test")
+    res.redirect("/login")
   }
-})
+}
+
+app.use('/admin', checkAdmin)
 
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, '/admin.html'));
+  res.sendFile(path.join(__dirname, '/html/admin.html'));
 })
 
-app.get('/admin/test', (req, res) => {
-  res.send("Testbereich")
+app.get('/admin/runners', (req, res) => {
+  res.sendFile(path.join(__dirname, '/html/admin/runners.html'));
+})
+
+app.get('/admin/event', (req, res) => {
+  res.sendFile(path.join(__dirname, '/html/admin/event.html'));
+})
+
+// ----------- API Routen -----------
+
+app.post('/api/login', (req, res) => {
+  auth.adminLogin(req.body.password, (err, token) => {
+    if (err) {
+      res.redirect('/login?error=' +  err)
+    } else {
+      res.cookie('token', token)
+      res.redirect('/admin')
+    }
+  })
+})
+
+app.use('/api/admin', checkAdmin)
+
+app.get('/api/admin/jahrgaenge', (req, res) => {
+  db.getJahrgaenge((err, results) => {
+    if (err) {
+      res.status(404).json({ message: err})
+    }
+    else {
+      console.log(results)
+      res.json({results})
+    }
+  })
 })
 
 app.listen(port, () => {

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verwaltungsbereich</title>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+</head>
+<body>
+    <div class="container">
+        <h1>Wilkommen im Admin-Panel!</h1>
+        <p>Hier kannst du alles verwalten, was für den Spendenlauf nötig ist.</p>
+        <button id="to-runners">Zur Läuferverwaltung</button>
+        <button id="to-event">Event-Modus</button>
+    </div>
+</body>
+<script type="text/javascript">
+    document.getElementById("to-runners").onclick = function () {
+        location.href = "/admin/runners";
+    }
+    document.getElementById("to-event").onclick = function () {
+        location.href = "/admin/event";
+    }
+</script>
+</html>
