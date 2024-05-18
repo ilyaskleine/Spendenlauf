@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
 
+var fs = require('fs');
+
 var db = require('./js/database')
 var auth = require('./js/authentication');
 
@@ -17,6 +19,10 @@ app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '/html/index.html'))
+})
+
+app.get('/live', (req, res) => {
+  res.sendFile(path.join(__dirname, '/html/live.html'))
 })
 
 app.get('/login', (req, res) => {
@@ -55,6 +61,7 @@ app.get('/admin/event', (req, res) => {
 })
 
 // ----------- API Routen -----------
+// PUBLIC
 
 app.post('/api/login', (req, res) => {
   auth.adminLogin(req.body.password, (err, token) => {
@@ -67,6 +74,24 @@ app.post('/api/login', (req, res) => {
   })
 })
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+
+var first = 0;
+var second = 0;
+app.get('/api/raised', (req, res) => {
+  //var obj = JSON.parse(fs.readFileSync('amount.json', 'utf8'));
+  res.json({amount:  first + ',' + second + '0'})
+  second = second + 4;
+  if (second >= 10) {
+    first = first + 1;
+    second = 0;
+  }
+})
+
+// ADMIN
 app.use('/api/admin', checkAdmin)
 
 app.get('/api/admin/jahrgaenge', (req, res) => {

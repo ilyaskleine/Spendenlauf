@@ -5,15 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Läuferverwaltung</title>
     <link href="/css/main.css" rel="stylesheet" type="text/css">
-    <script src="/js/runners.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
-</head>
 <body>
-    <div class="container">
-        <h1>Läuferverwaltung</h1>
+    <div id="app">
+        <div class="container">
+            <h1>Läuferverwaltung</h1>
+            <div class="dropdownMenu">
+                <select v-model="selected" class="selectCN">
+                  <option v-for="jahrgang in jahrgaenge" :value="jahrgangsstufe">{{jahrgang.name}}</option>
+                </select>
+            </div>
+            <div>
+                <table v-if="selected">
+                    <tr>
+                      <th>Nr.</th>
+                      <th>Läufer</th> 
+                      <th>Rudenbetrag</th>
+                      <th>Runden</th>
+                      <th>Gesammt (berechnet)</th>
+                    </tr>
+                    <tr v-for="runner in selected.runners">
+                      <td>1</td>
+                      <td>{{runner}}</td> 
+                      <td class="table-right">2,00€</td>
+                      <td class="table-right">0</td>
+                      <td class="table-right" style="color: green">0,00€</td>
+                    </tr>
+                </table>
+                <table v-if="selected">
+                    <tr>
+                      <th>GESAMMT</th>
+                    </tr>
+                    <tr>
+                      <td class="table-right" style="color: green">{{ selected.total }}</td>
+                    </tr>
+                </table>
+            </div>                        
+        <div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/js/runners.js"></script>
 </body>
 </html>

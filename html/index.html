@@ -16,12 +16,16 @@
         <div id="admin" class="section">
             <h2>Du bist Admin?</h2>
             <button id="to-admin">Zum Adminbereich</button>
+            <button id="to-live">Live-Ansicht</button>
         </div>
     </div>
 </body>
 <script type="text/javascript">
     document.getElementById("to-admin").onclick = function () {
         location.href = "/admin";
+    }
+    document.getElementById("to-live").onclick = function () {
+        location.href = "/live";
     }
 </script>
 </html>

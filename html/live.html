@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Ansicht</title>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/css/live.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="/js/numberAnimate.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="count-container">
+            <div class="count"><span id="counter"></span><span style="margin-left: 2rem"> €</span></div>
+            <h1>gesammelt</h1>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    var myCounter = $('#counter');
+    myCounter.numberAnimate({
+        animationTimes: [100, 500, 100]
+    });
+
+    function update() {
+        fetch('/api/raised')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data)
+                //document.getElementById('count').innerText = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(data.amount);
+                myCounter.numberAnimate('set', data.amount)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    update()
+    setInterval(update, 1500)
+
+</script>
+</html>
