@@ -17,6 +17,7 @@
             <h2>Du bist Admin?</h2>
             <button id="to-admin">Zum Adminbereich</button>
             <button id="to-live">Live-Ansicht</button>
+            <button id="logout">Admin ausloggen</button>
         </div>
     </div>
 </body>
@@ -26,6 +27,9 @@
     }
     document.getElementById("to-live").onclick = function () {
         location.href = "/live";
+    }
+    document.getElementById("logout").onclick = function () {
+        location.href = "/logout";
     }
 </script>
 </html>

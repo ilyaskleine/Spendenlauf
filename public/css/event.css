@@ -1,0 +1,21 @@
+.runner-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.runner {
+    font-family: Arial, Helvetica, sans-serif;
+    color: black;
+    background-color: lightgray;
+    border-style: solid;
+    border-width: 2px;
+    padding: 8px;
+    margin: 10px;
+    text-align: center;
+    width: 130px;
+}
+
+.runner .number {
+    font-size: 2rem;
+}
