@@ -26,22 +26,8 @@ app = new Vue({
                 console.error('Error:', error);
             });
         },
-        create: function() {
-            input = {
-                number: document.getElementById('number').value,
-                name: document.getElementById('name').value,
-                per_round: document.getElementById('per_round').value,
-                jahrgang: this.selected.id
-            }
-            console.log(input)
-            postAPI("/api/admin/runner", input).then((data) => {
-                console.log(data)
-                this.update()
-            })
-        },
-        deleteRunner: function(number) {
-            console.log(number)
-            deleteAPI("/api/admin/runner", {number: number}).then((data) => {
+        addRound: function(number) {
+            putAPI("/api/admin/round", {number: number}).then((data) => {
                 console.log(data)
                 this.update()
             })

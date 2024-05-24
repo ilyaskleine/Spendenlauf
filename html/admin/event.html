@@ -3,16 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event-Modus</title>
+    <title>Läuferverwaltung</title>
     <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/css/event.css" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-</head>
+    <script src="/js/network.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Event-Modus</h1>
+    <div id="app">
+        <div class="container">
+          <h1>Rundenzähler</h1>
+          <div>
+            <div class="box">
+              <h2>Aktueller Lauf</h2>
+                <div class="dropdownMenu">
+                  <select v-model="selected" class="selectCN">
+                    <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
+                  </select>
+                </div>
+                <div class="runner-container" v-if="selected">
+                    <div class="runner" v-for="runner in selected.runners" v-on:click="addRound(runner.number)">
+                        <div class="number">{{runner.number}}</div>
+                        <div>{{runner.name}}</div>
+                        <div><i>{{runner.rounds}} Runden</i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box">
+                <h2>Logbuch</h2>
+            </div>
+          </div>                   
+        <div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/js/event.js"></script>
 </body>
 </html>
