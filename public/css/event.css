@@ -2,20 +2,34 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    max-width: 1000px;
 }
 
 .runner {
     font-family: Arial, Helvetica, sans-serif;
     color: black;
-    background-color: lightgray;
+    background-color: white;
     border-style: solid;
     border-width: 2px;
     padding: 8px;
     margin: 10px;
     text-align: center;
     width: 130px;
+    max-width: 35%;
 }
 
 .runner .number {
     font-size: 2rem;
+}
+
+.runner .rounds {
+    margin-top: 5px;
+}
+
+.remove {
+    background-color: lightcoral;
+}
+
+.negativ {
+    color: red;
 }

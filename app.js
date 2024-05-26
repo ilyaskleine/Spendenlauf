@@ -91,17 +91,15 @@ function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-
-var first = 0;
-var second = 0;
 app.get('/api/raised', (req, res) => {
-  //var obj = JSON.parse(fs.readFileSync('amount.json', 'utf8'));
-  res.json({amount:  first + ',' + second + '0'})
-  second = second + 4;
-  if (second >= 10) {
-    first = first + 1;
-    second = 0;
-  }
+  db.getTotal((err, raised) => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      amountString = raised.toFixed(2).replaceAll('.', ',')
+      res.json({success: true, amount: amountString})
+    }
+  });
 })
 
 // ADMIN
@@ -140,6 +138,16 @@ app.delete('/api/admin/runner', (req, res) => {
 
 app.put('/api/admin/round', (req, res) => {
   db.addRound(req.body.number, err => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true})
+    }
+  })
+})
+
+app.delete('/api/admin/round', (req, res) => {
+  db.removeRound(req.body.number, err => {
     if (err) {
       res.status(500).json({success: false, error: err})
     } else {
