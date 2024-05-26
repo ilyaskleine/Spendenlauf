@@ -7,6 +7,9 @@ app = new Vue({
     methods: {
         update: function() {
             vue = this;
+            document.getElementById('number').value = "",
+            document.getElementById('name').value = "",
+            document.getElementById('per_round').value = "",
             fetch('/api/admin/jahrgaenge')
             .then(response => {
                 if (!response.ok) {

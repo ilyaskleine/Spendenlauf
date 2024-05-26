@@ -65,14 +65,55 @@ function createRunner(number, name, per_round, jahrgang_id, callback) {
 
 function deleteRunner(number, callback) {
     pool.query("DELETE FROM laeufer WHERE number = " + pool.escape(number) + ";", (err, results) => {
-        callback(err);
+        if (err) return callback(err);
+        calcAll(callback);
     })
 }
 
 function addRound(runner_number, callback) {
-    pool.query("UPDATE laeufer SET rounds = rounds + 1 WHERE number = " 
+    pool.query("UPDATE laeufer SET rounds = rounds + 1, amount_raised = rounds * per_round WHERE number = " 
     + pool.escape(runner_number) + ";", (err, results) => {
-        callback(err);
+        if (err) return callback(err);
+        calcAll(callback)
+    })
+}
+
+function removeRound(runner_number, callback) {
+    pool.query("UPDATE laeufer SET rounds = rounds - 1, amount_raised = rounds * per_round WHERE number = " 
+    + pool.escape(runner_number) + ";", (err, results) => {
+        if (err) return callback(err);
+        calcAll(callback)
+    })
+}
+
+
+function getTotal(callback) {
+    pool.query("SELECT amount_raised as raised FROM spendenlauf WHERE id = " + pool.escape(process.env.SPENDENLAUF_ID) + ";", (err, results)  => {
+        if (err) return callback(err, null);
+        callback(null, results[0].raised);
+    })
+}
+
+// -------- [NOT_EXP] CALCULATIONS --------
+
+function calcJahrgaenge(callback) {
+    pool.query("UPDATE jahrgang SET jahrgang.amount_raised = (SELECT SUM(laeufer.amount_raised) FROM laeufer WHERE laeufer.jahrgang_id = jahrgang.id);", (err, results) =>{
+        callback(err)
+    })
+}
+
+function calcTotal(callback) {
+    pool.query("UPDATE spendenlauf SET spendenlauf.amount_raised = (SELECT SUM(jahrgang.amount_raised) FROM jahrgang WHERE spendenlauf_id = spendenlauf.id);", (err, results) =>{
+        callback(err)
+    })
+}
+
+function calcAll(callback) {
+    calcJahrgaenge(err => {
+        if (err) return callback(err);
+        calcTotal(totalErr => {
+            callback(totalErr)
+        })
     })
 }
 
@@ -110,6 +151,9 @@ module.exports = {
     deleteRunner: deleteRunner,
 
     addRound: addRound,
+    removeRound: removeRound,
+
+    getTotal: getTotal,
 
     saveToken: saveToken,
     checkToken: checkToken,

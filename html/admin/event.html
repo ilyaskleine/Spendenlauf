@@ -18,21 +18,29 @@
           <div>
             <div class="box">
               <h2>Aktueller Lauf</h2>
+              <button class="floating-button" v-on:click="update">Refresh</button>
+              <button v-bind:class="{negativ: !correctionMode}" v-on:click="correctionMode = !correctionMode">Korrekturmodus</button>
                 <div class="dropdownMenu">
                   <select v-model="selected" class="selectCN">
                     <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
                   </select>
                 </div>
                 <div class="runner-container" v-if="selected">
-                    <div class="runner" v-for="runner in selected.runners" v-on:click="addRound(runner.number)">
+                    <div class="runner" v-for="runner in selected.runners" v-on:click="addOrRemove(runner.number)" v-bind:class="{remove: correctionMode}">
                         <div class="number">{{runner.number}}</div>
                         <div>{{runner.name}}</div>
-                        <div><i>{{runner.rounds}} Runden</i></div>
+                        <div class="rounds"><i><b>{{ runner.rounds }}</b> {{rundenString(runner.rounds)}}</i></div>
                     </div>
                 </div>
             </div>
             <div class="box">
                 <h2>Logbuch</h2>
+                <table>
+                  <tr v-for="(value, key) in getLog()">
+                    <td>{{key}}</td>
+                    <td>{{value}}</td>
+                  </tr>
+                </table>
             </div>
           </div>                   
         <div>

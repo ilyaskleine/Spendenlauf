@@ -26,3 +26,9 @@ th, td {
 .table-right {
     text-align: right;
 }
+
+.floating-button {
+    position: absolute;
+    right: 30px;
+    top: 25px;
+}
