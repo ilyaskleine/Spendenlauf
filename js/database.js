@@ -46,15 +46,15 @@ function getJahrgaenge(callback) {
     // callback(null, [{id: 1, name: "5. Klasse", total: 0, runners: ["Alex Meier"]}, {id: 2, name: "6. Klasse", total: 0, runners: ["Lena Fuchs", "Tom Steiger"]}])
 }
 
-function createRunner(number, name, per_round, jahrgang_id, callback) {
+function createRunner(name, per_round, jahrgang_id, callback) {
     if (!per_round) per_round = 0
+    const number = 0;
     validateRunnerID(number, idIsValid => {
         if (idIsValid) {
-            pool.query("INSERT INTO laeufer (number, name, per_round, jahrgang_id, class) VALUES (" 
-                    + pool.escape(number) + ", " 
+            pool.query("INSERT INTO laeufer (name, per_round, class_id) VALUES (" 
                     + pool.escape(name) + ", " 
                     + pool.escape(per_round) + ", " 
-                    + pool.escape(jahrgang_id) + ", '11a');", (err, results) => {
+                    + pool.escape(1) + ");", (err, results) => {
                         callback(err)
                     })
         } else {
@@ -122,6 +122,13 @@ function calcAll(callback) {
 function validateRunnerID(id, callback) {
     // Implement check
     callback(true)
+}
+
+function getNewRunnerID(callback) {
+    pool.query("SELECT number FROM laeufer;", (number, err) => {
+        if (err) return callback(err, null);
+        // Implementation
+    })
 }
 
 
