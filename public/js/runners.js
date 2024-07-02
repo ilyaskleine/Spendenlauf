@@ -7,7 +7,6 @@ app = new Vue({
     methods: {
         update: function() {
             vue = this;
-            document.getElementById('number').value = "",
             document.getElementById('name').value = "",
             document.getElementById('per_round').value = "",
             fetch('/api/admin/jahrgaenge')
@@ -31,7 +30,6 @@ app = new Vue({
         },
         create: function() {
             input = {
-                number: document.getElementById('number').value,
                 name: document.getElementById('name').value,
                 per_round: document.getElementById('per_round').value,
                 jahrgang: this.selected.id
@@ -55,5 +53,18 @@ app = new Vue({
     },
     mounted: function() {
         this.update()
+
+        document.getElementById("name").addEventListener("keyup", function(event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                document.getElementById('per_round').focus()
+            }
+        });
+        
+        vue = this
+        document.getElementById('per_round').addEventListener("keyup", function(event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                vue.create()
+            }
+        });
     }
 });
