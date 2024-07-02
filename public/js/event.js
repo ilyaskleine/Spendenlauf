@@ -2,7 +2,8 @@ app = new Vue({
     el: '#app',
     data: {
         jahrgaenge: [],
-        selected: null,
+        selectedJahrgang: null,
+        selectedClass: null,
         correctionMode: false
     },
     methods: {
@@ -21,6 +22,11 @@ app = new Vue({
                     this.selected = this.jahrgaenge[0];
                 } else {
                     this.selected = this.jahrgaenge.find(jahrgang => jahrgang.id == this.selected.id);
+                }
+                if (!this.selectedClass) {
+                    this.selectedClass = this.selectedJahrgang.classes[0];
+                } else {
+                    this.selectedClass = this.selectedJahrgang.classes.find(classObj => classObj.id == this.selectedClass.id);
                 }
             })
             .catch(error => {

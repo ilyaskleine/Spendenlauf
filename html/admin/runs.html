@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Läuferverwaltung</title>
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <link href="/css/runs.css" rel="stylesheet" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <script src="/js/network.js"></script>
+</head>
+<header><b>Runden-Verwaltung</b></header>
+<body>
+    <div id="app">
+        <div class="container">
+          <div class="flex-container">
+            <div class="box">
+              <h2>Runden</h2>
+            </div>
+            <div id="form" class="box">
+              <h2>Neue Runde anlegen</h2>
+              <label for="title"><span>Titel</span></label>
+              <input type="text" name="title" id="title">
+              <label for="jahr1"><span>Erster Jahrgang</span></label>
+              <select v-model="selectedJahrgang1" class="selectCN">
+                <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
+              </select>
+              <label for="jahr2"><span>Zweiter Jahrgang</span></label>
+              <select v-model="selectedJahrgang2" class="selectCN">
+                <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
+              </select>
+              <br><button style="margin-top: 15px" v-on:click="create">Anlegen</button>
+            </div>
+          </div>                   
+        <div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="/js/runs.js"></script>
+</body>
+</html>

@@ -1,12 +1,18 @@
+
 html {
-    background-color: #192841;
+    background-color: #46424f;
     color: white;
-    font-family: "Raleway", sans-serif;
+    font-family: "Plus Jakarta Sans", "Raleway", sans-serif;
     font-optical-sizing: auto;
 }
 
 .container {
-    padding: 5px 20px;
+    background-color: #1a1625;
+    padding: 20px;
+    margin-top: 75px;
+    border-radius: 12px;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 table, th, td {
@@ -31,4 +37,33 @@ th, td {
     position: absolute;
     right: 30px;
     top: 25px;
+}
+
+button {
+    background-color: #a688fa;
+    border-style: none;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 10px;
+    font-size: 0.8rem;
+}
+
+header {
+    display: block;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    font-size: 2.1rem;
+    background-color: #46424f;
+    padding: 1rem 30px;
+}
+
+@media only screen and (max-width: 992px) {
+    header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
 }

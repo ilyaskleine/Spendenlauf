@@ -74,6 +74,10 @@ app.get('/admin/event', (req, res) => {
   res.sendFile(path.join(__dirname, '/html/admin/event.html'));
 })
 
+app.get('/admin/runs', (req, res) => {
+  res.sendFile(path.join(__dirname, '/html/admin/runs.html'));
+})
+
 // ----------- API Routen -----------
 // PUBLIC
 
@@ -107,7 +111,7 @@ app.get('/api/raised', (req, res) => {
 app.use('/api/admin', checkAdmin)
 
 app.get('/api/admin/jahrgaenge', (req, res) => {
-    db.getJahrgaenge((err, results) => {
+    db.getRunnerStruct((err, results) => {
     if (err) {
       res.status(404).json({ message: err})
     }
@@ -129,6 +133,26 @@ app.post('/api/admin/runner', (req, res) => {
 
 app.delete('/api/admin/runner', (req, res) => {
   db.deleteRunner(req.body.number, err => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true})
+    }
+  })
+})
+
+app.get('/api/admin/runs', (req, res) => {
+  db.getRuns((err, results) => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true, runs: results})
+    }
+  })
+})
+
+app.post('/api/admin/run', (req, res) => {
+  db.createRun(req.body.title, req.body.jahrgang_1, req.body.jahrgang_2, (err, results) => {
     if (err) {
       res.status(500).json({success: false, error: err})
     } else {

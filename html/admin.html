@@ -16,8 +16,9 @@
     <div class="container">
         <h1>Wilkommen im Admin-Panel!</h1>
         <p>Hier kannst du alles verwalten, was für den Spendenlauf nötig ist.</p>
-        <button id="to-runners">Zur Läuferverwaltung</button>
+        <button id="to-runners">Zur Läufer-Verwaltung</button>
         <button id="to-event">Event-Modus</button>
+        <button id="to-runs">Zur Runden-Verwaltung</button>
     </div>
 </body>
 <script type="text/javascript">
@@ -26,6 +27,9 @@
     }
     document.getElementById("to-event").onclick = function () {
         location.href = "/admin/event";
+    }
+    document.getElementById("to-runs").onclick = function () {
+        location.href = "/admin/runs";
     }
 </script>
 </html>
