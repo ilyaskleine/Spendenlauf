@@ -1,8 +1,8 @@
 require ('dotenv').config()
 
-const mysql = require('mysql')
+const mysql = require('mysql2')
 
-const pool = mysql.createPool({
+const pool = mysql.createConnection({
     connectionLimit: 10,
     host: process.env.MYSQL,
     user: process.env.MYSQL_USER,
@@ -50,11 +50,11 @@ function createRunner(number, name, per_round, jahrgang_id, callback) {
     if (!per_round) per_round = 0
     validateRunnerID(number, idIsValid => {
         if (idIsValid) {
-            pool.query("INSERT INTO laeufer (number, name, per_round, jahrgang_id) VALUES (" 
+            pool.query("INSERT INTO laeufer (number, name, per_round, jahrgang_id, class) VALUES (" 
                     + pool.escape(number) + ", " 
                     + pool.escape(name) + ", " 
                     + pool.escape(per_round) + ", " 
-                    + pool.escape(jahrgang_id) + ");", (err, results) => {
+                    + pool.escape(jahrgang_id) + ", '11a');", (err, results) => {
                         callback(err)
                     })
         } else {
