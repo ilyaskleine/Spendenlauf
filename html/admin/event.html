@@ -26,7 +26,12 @@
                     <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
                   </select>
                 </div>
-                <div class="runner-container" v-if="selected">
+                <div class="dropdownMenu" v-if="selectedJahrgang">
+                  <select v-model="selectedClass" class="selectCN">
+                    <option v-for="classs in selectedJahrgang.classes" :value="classs">{{classs.name}}</option>
+                  </select>
+                </div>
+                <div class="runner-container" v-if="selectedJahrgang>
                     <div class="runner" v-for="runner in selected.runners" v-on:click="addOrRemove(runner.number)" v-bind:class="{remove: correctionMode}">
                         <div class="number">{{runner.number}}</div>
                         <div>{{runner.name}}</div>

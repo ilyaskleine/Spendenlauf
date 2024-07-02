@@ -21,29 +21,41 @@ function getAllRunners(callback) {
     pool.query("SELECT * FROM laeufer;", callback)
 }
 
-function getJahrgaenge(callback) {
-    var jahrgaenge = []
+function getAllClasses(callback) {
+    pool.query("SELECT * FROM class;", callback)
+}
 
-    pool.query("SELECT * FROM jahrgang;", function (err, results) {
-        if (err) return callback(err, null)
-        for (var jahrgang of results) {
-            jahrgang.runners = []
-            jahrgaenge.push(jahrgang)
-        }
-        getAllRunners((runners_err, runners) => {
-            if (runners_err) return callback(err, null)
-            for (var runner of runners) {
-                for (var jahrgang of jahrgaenge) { 
-                  if(jahrgang.id == runner.jahrgang_id) {
-                    jahrgang.runners.push(runner);
-                  }
+function getAllJahrgaenge(callback) {
+    pool.query("SELECT * FROM jahrgang;", callback)
+}
+
+function getRunnerStruct(callback) {
+    getAllRunners((runners_err, runners) => {
+        if (runners_err) return callback(runners_err, null)
+        getAllClasses((classes_err, classes) => {
+            if (classes_err) return callback(classes_err, null);
+            for (var classObj of classes) {
+                classObj.runners = []
+                for (var runner of runners) {
+                    if (runner.class_id == classObj.id) {
+                        classObj.runners.push(runner)
+                    }
                 }
             }
-            callback(null, jahrgaenge)     
-        })
+            getAllJahrgaenge((jahr_err, jahrgaenge) => {
+                if (jahr_err) return callback(jahr_err, null)
+                for (var jahrgang of jahrgaenge) {
+                    jahrgang.classes = []
+                    for (var classObj of classes) {
+                        if (classObj.jahrgang_id == jahrgang.id) {
+                            jahrgang.classes.push(classObj)
+                        }
+                    }
+                }
+                callback(null, jahrgaenge)
+            })
+        })   
     })
-    
-    // callback(null, [{id: 1, name: "5. Klasse", total: 0, runners: ["Alex Meier"]}, {id: 2, name: "6. Klasse", total: 0, runners: ["Lena Fuchs", "Tom Steiger"]}])
 }
 
 function createRunner(name, per_round, jahrgang_id, callback) {
@@ -70,6 +82,25 @@ function deleteRunner(number, callback) {
     })
 }
 
+// -------- RUNS --------
+function createRun(title, jahrgang_id1, jahrgang_id2, callback) {
+    pool.query("INSERT INTO run (title, jahrgang_1, jahrgang_2) VALUES (" 
+        + pool.escape(title) + ", "
+        + pool.escape(jahrgang_id1) + ", "
+        + pool.escape(jahrgang_id2) + ");", callback)
+}
+
+function getRuns(callback) {
+    pool.query("select run.title, jahrgang.name from run, runToJahrgang, jahrgang where run.id = runToJahrgang.run_id and jahrgang.id = runToJahrgang.jahrgang_id;",
+    (err, results) => {
+        if (err) return callback(err, null)
+
+    }
+    )
+}
+
+// -------- ROUNDS --------
+
 function addRound(runner_number, callback) {
     pool.query("UPDATE laeufer SET rounds = rounds + 1, amount_raised = rounds * per_round WHERE number = " 
     + pool.escape(runner_number) + ";", (err, results) => {
@@ -86,8 +117,10 @@ function removeRound(runner_number, callback) {
     })
 }
 
-
+// -------- TOTAL FOR DASHBOARD --------
 function getTotal(callback) {
+    createRun("Test", [1], callback);
+    return
     pool.query("SELECT amount_raised as raised FROM spendenlauf WHERE id = " + pool.escape(process.env.SPENDENLAUF_ID) + ";", (err, results)  => {
         if (err) return callback(err, null);
         callback(null, results[0].raised);
@@ -96,8 +129,14 @@ function getTotal(callback) {
 
 // -------- [NOT_EXP] CALCULATIONS --------
 
+function calcClasses(callback) {
+    pool.query("UPDATE class SET class.amount_raised = (SELECT SUM(laeufer.amount_raised) FROM laeufer WHERE laeufer.class_id = class.id);", (err, results) =>{
+        callback(err)
+    })
+}
+
 function calcJahrgaenge(callback) {
-    pool.query("UPDATE jahrgang SET jahrgang.amount_raised = (SELECT SUM(laeufer.amount_raised) FROM laeufer WHERE laeufer.jahrgang_id = jahrgang.id);", (err, results) =>{
+    pool.query("UPDATE jahrgang SET jahrgang.amount_raised = (SELECT SUM(class.amount_raised) FROM class WHERE class.jahrgang_id = jahrgang.id);", (err, results) =>{
         callback(err)
     })
 }
@@ -152,10 +191,12 @@ function removeToken(token, callback) {
 }
 
 module.exports = {
-    getJahrgaenge: getJahrgaenge,
+    getRunnerStruct: getRunnerStruct,
     
     createRunner: createRunner,
     deleteRunner: deleteRunner,
+
+    createRun: createRun,
 
     addRound: addRound,
     removeRound: removeRound,

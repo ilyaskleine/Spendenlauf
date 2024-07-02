@@ -21,11 +21,16 @@
               <h2>Jahrgang-Übersicht</h2>
               <button class="floating-button" v-on:click="update">Refresh</button>
                 <div class="dropdownMenu">
-                  <select v-model="selected" class="selectCN">
+                  <select v-model="selectedJahrgang" class="selectCN">
                     <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
                   </select>
                 </div>
-                <table v-if="selected">
+                <div class="dropdownMenu" v-if="selectedJahrgang">
+                  <select v-model="selectedClass" class="selectCN">
+                    <option v-for="classs in selectedJahrgang.classes" :value="classs">{{classs.name}}</option>
+                  </select>
+                </div>
+                <table v-if="selectedClass">
                     <tr>
                       <th>Nr.</th>
                       <th>Läufer</th> 
@@ -33,7 +38,7 @@
                       <th>Runden</th>
                       <th>Gesammt (berechnet)</th>
                     </tr>
-                    <tr v-for="runner in selected.runners">
+                    <tr v-for="runner in selectedClass.runners">
                       <td>{{runner.number}}</td>
                       <td class="removable" v-on:click="deleteRunner(runner.number)">{{runner.name}}</td> 
                       <td class="table-right euro">{{formatEuro(runner.per_round)}}</td>
@@ -41,12 +46,12 @@
                       <td class="table-right euro" style="color: green">{{formatEuro(runner.amount_raised)}}</td>
                     </tr>
                 </table>
-                <table v-if="selected">
+                <table v-if="selectedJahrgang">
                     <tr>
-                      <th>GESAMMT</th>
+                      <th>JAHRGANG GESAMMT</th>
                     </tr>
                     <tr>
-                      <td class="table-right euro" style="color: green">{{ formatEuro(selected.amount_raised) }}</td>
+                      <td class="table-right euro" style="color: green">{{ formatEuro(selectedJahrgang.amount_raised) }}</td>
                     </tr>
                 </table>
             </div>
@@ -55,8 +60,8 @@
               <label for="name"><span>Name</span></label>
               <input type="text" name="name" id="name">
               <label for="per_round"><span>Betrag pro Runde</span></label>
-              <input type="number" name="per_round" id="per_round">
-              <button v-on:click="create">Anlegen</button>
+              <input type="number" name="per_round" id="per_round"><br>
+              <button style="margin-top: 15px" v-on:click="create">Anlegen</button>
             </div>
           </div>                   
         <div>

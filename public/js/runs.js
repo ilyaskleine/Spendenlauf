@@ -2,14 +2,13 @@ app = new Vue({
     el: '#app',
     data: {
         jahrgaenge: [],
-        selectedJahrgang: null,
-        selectedClass: null
+        selectedJahrgang1: null,
+        selectedJahrgang2: null,
     },
     methods: {
         update: function() {
             vue = this;
-            document.getElementById('name').value = "",
-            document.getElementById('per_round').value = "",
+            document.getElementById('title').value = "",
             fetch('/api/admin/jahrgaenge')
             .then(response => {
                 if (!response.ok) {
@@ -37,41 +36,25 @@ app = new Vue({
         },
         create: function() {
             input = {
-                name: document.getElementById('name').value,
-                per_round: document.getElementById('per_round').value,
-                jahrgang: this.selectedJahrgang.id
+                title: document.getElementById('title').value,
+                jahrgang_1: this.selectedJahrgang1.id,
+                jahrgang_2: this.selectedJahrgang2.id
             }
             console.log(input)
-            postAPI("/api/admin/runner", input).then((data) => {
+            postAPI("/api/admin/run", input).then((data) => {
                 console.log(data)
                 if (data.success == true) this.update();
             })
         },
-        deleteRunner: function(number) {
+        deleteRun: function(number) {
             console.log(number)
             deleteAPI("/api/admin/runner", {number: number}).then((data) => {
                 console.log(data)
                 this.update()
             })
         },
-        formatEuro: function(value) {
-            return value.toFixed(2).replaceAll('.', ',')
-        }
     },
     mounted: function() {
         this.update()
-
-        document.getElementById("name").addEventListener("keyup", function(event) {
-            if (event.key === "Enter" || event.keyCode === 13) {
-                document.getElementById('per_round').focus()
-            }
-        });
-        
-        vue = this
-        document.getElementById('per_round').addEventListener("keyup", function(event) {
-            if (event.key === "Enter" || event.keyCode === 13) {
-                vue.create()
-            }
-        });
     }
 });
