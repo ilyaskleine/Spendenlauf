@@ -90,13 +90,35 @@ function createRun(title, jahrgang_id1, jahrgang_id2, callback) {
         + pool.escape(jahrgang_id2) + ");", callback)
 }
 
-function getRuns(callback) {
-    pool.query("select run.title, jahrgang.name from run, runToJahrgang, jahrgang where run.id = runToJahrgang.run_id and jahrgang.id = runToJahrgang.jahrgang_id;",
-    (err, results) => {
-        if (err) return callback(err, null)
+function getAllRuns(callback) {
+    pool.query("SELECT * FROM run;", callback)
+}
 
-    }
-    )
+function getRunsWithRunners(callback) {
+    getAllRuns((err, runs) => {
+        if (err) return callback(err, null)
+        runCount = 0;
+        for (var run of runs) {
+            runCount++;
+            (function(runCountCopy) { pool.query("SELECT laeufer.* FROM run, jahrgang, class, laeufer "
+                + "WHERE laeufer.class_id = class.id "
+                + "AND class.jahrgang_id = jahrgang.id "
+                + "AND (run.jahrgang_1 = jahrgang.id OR run.jahrgang_2 = jahrgang.id) "
+                + "AND run.id = " + pool.escape(run.id) + ';',
+                (err, runners) => {
+                    if (err) return callback(err, null)
+                    run.runners = runners
+                    console.log(runCountCopy, runs.length)
+                    if (runCountCopy >= runs.length) {
+                        console.log(runs)
+                        callback(null, runs)
+                    }
+                })
+            }
+            )(runCount)
+        }
+    })
+   
 }
 
 // -------- ROUNDS --------
@@ -119,8 +141,6 @@ function removeRound(runner_number, callback) {
 
 // -------- TOTAL FOR DASHBOARD --------
 function getTotal(callback) {
-    createRun("Test", [1], callback);
-    return
     pool.query("SELECT amount_raised as raised FROM spendenlauf WHERE id = " + pool.escape(process.env.SPENDENLAUF_ID) + ";", (err, results)  => {
         if (err) return callback(err, null);
         callback(null, results[0].raised);
@@ -197,6 +217,8 @@ module.exports = {
     deleteRunner: deleteRunner,
 
     createRun: createRun,
+    getAllRuns: getAllRuns,
+    getRunsWithRunners: getRunsWithRunners,
 
     addRound: addRound,
     removeRound: removeRound,

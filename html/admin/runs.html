@@ -19,6 +19,20 @@
           <div class="flex-container">
             <div class="box">
               <h2>Runden</h2>
+              <table v-if="runs">
+                <tr>
+                  <th>ID</th>
+                  <th>Titel</th> 
+                  <th>Jahrgang 1</th>
+                  <th>Jahrgang 2</th>
+                </tr>
+                <tr v-for="run in runs">
+                  <td>{{run.id}}</td>
+                  <td>{{run.title}}</td> 
+                  <td>{{run.jahrgang_1}}</td>
+                  <td>{{run.jahrgang_2}}</td>
+                </tr>
+            </table>
             </div>
             <div id="form" class="box">
               <h2>Neue Runde anlegen</h2>

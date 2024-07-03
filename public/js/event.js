@@ -1,15 +1,14 @@
 app = new Vue({
     el: '#app',
     data: {
-        jahrgaenge: [],
-        selectedJahrgang: null,
-        selectedClass: null,
+        runs: [],
+        selectedRun: null,
         correctionMode: false
     },
     methods: {
         update: function() {
             vue = this;
-            fetch('/api/admin/jahrgaenge')
+            fetch('/api/admin/runs-runners')
             .then(response => {
                 if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -17,16 +16,12 @@ app = new Vue({
                 return response.json();
             })
             .then(data => {
-                this.jahrgaenge = data.results;
-                if (!this.selected) {
-                    this.selected = this.jahrgaenge[0];
+                this.runs = data.runs;
+                console.log(data, this.runs)
+                if (!this.selectedRun) {
+                    this.selectedRun = this.runs[0];
                 } else {
-                    this.selected = this.jahrgaenge.find(jahrgang => jahrgang.id == this.selected.id);
-                }
-                if (!this.selectedClass) {
-                    this.selectedClass = this.selectedJahrgang.classes[0];
-                } else {
-                    this.selectedClass = this.selectedJahrgang.classes.find(classObj => classObj.id == this.selectedClass.id);
+                    this.selectedRun = this.runs.find(jahrgang => jahrgang.id == this.selectedRun.id);
                 }
             })
             .catch(error => {

@@ -142,7 +142,17 @@ app.delete('/api/admin/runner', (req, res) => {
 })
 
 app.get('/api/admin/runs', (req, res) => {
-  db.getRuns((err, results) => {
+  db.getAllRuns((err, results) => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true, runs: results})
+    }
+  })
+})
+
+app.get('/api/admin/runs-runners', (req, res) => {
+  db.getRunsWithRunners((err, results) => {
     if (err) {
       res.status(500).json({success: false, error: err})
     } else {
