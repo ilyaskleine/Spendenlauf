@@ -2,6 +2,7 @@ app = new Vue({
     el: '#app',
     data: {
         jahrgaenge: [],
+        runs: [],
         selectedJahrgang1: null,
         selectedJahrgang2: null,
     },
@@ -9,6 +10,20 @@ app = new Vue({
         update: function() {
             vue = this;
             document.getElementById('title').value = "",
+            fetch('/api/admin/runs')
+            .then(response => {
+                if (!response.ok) {
+                throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.runs = data.runs;
+                console.log(this.runs)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
             fetch('/api/admin/jahrgaenge')
             .then(response => {
                 if (!response.ok) {

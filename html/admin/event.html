@@ -22,17 +22,12 @@
               <button class="floating-button" v-on:click="update">Refresh</button>
               <button v-bind:class="{negativ: !correctionMode}" v-on:click="correctionMode = !correctionMode">Korrekturmodus</button>
                 <div class="dropdownMenu">
-                  <select v-model="selected" class="selectCN">
-                    <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
+                  <select v-model="selectedRun" class="selectCN">
+                    <option v-for="run in runs" :value="run">{{run.title}}</option>
                   </select>
                 </div>
-                <div class="dropdownMenu" v-if="selectedJahrgang">
-                  <select v-model="selectedClass" class="selectCN">
-                    <option v-for="classs in selectedJahrgang.classes" :value="classs">{{classs.name}}</option>
-                  </select>
-                </div>
-                <div class="runner-container" v-if="selectedJahrgang>
-                    <div class="runner" v-for="runner in selected.runners" v-on:click="addOrRemove(runner.number)" v-bind:class="{remove: correctionMode}">
+                <div class="runner-container" v-if="selectedRun">
+                    <div class="runner" v-for="runner in selectedRun.runners" v-on:click="addOrRemove(runner.number)" v-bind:class="{remove: correctionMode}">
                         <div class="number">{{runner.number}}</div>
                         <div>{{runner.name}}</div>
                         <div class="rounds"><i><b>{{ runner.rounds }}</b> {{rundenString(runner.rounds)}}</i></div>
