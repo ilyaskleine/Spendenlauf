@@ -122,7 +122,7 @@ app.get('/api/admin/jahrgaenge', (req, res) => {
 })
 
 app.post('/api/admin/runner', (req, res) => {
-  db.createRunner(req.body.name, req.body.per_round, req.body.jahrgang, err => {
+  db.createRunner(req.body.name, req.body.per_round, req.body.jahrgang_id, req.body.class_id, err => {
     if (err) {
       res.status(500).json({success: false, error: err})
     } else {
