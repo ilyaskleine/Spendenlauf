@@ -58,7 +58,7 @@ function getRunnerStruct(callback) {
     })
 }
 
-function createRunner(name, per_round, jahrgang_id, callback) {
+function createRunner(name, per_round, jahrgang_id, class_id, callback) {
     if (!per_round) per_round = 0
     const number = 0;
     validateRunnerID(number, idIsValid => {
@@ -66,7 +66,7 @@ function createRunner(name, per_round, jahrgang_id, callback) {
             pool.query("INSERT INTO laeufer (name, per_round, class_id) VALUES (" 
                     + pool.escape(name) + ", " 
                     + pool.escape(per_round) + ", " 
-                    + pool.escape(1) + ");", (err, results) => {
+                    + pool.escape(class_id) + ");", (err, results) => {
                         callback(err)
                     })
         } else {
