@@ -39,7 +39,8 @@ app = new Vue({
             input = {
                 name: document.getElementById('name').value,
                 per_round: document.getElementById('per_round').value,
-                jahrgang: this.selectedJahrgang.id
+                jahrgang_id: this.selectedJahrgang.id,
+		class_id: this.selectedClass.id
             }
             console.log(input)
             postAPI("/api/admin/runner", input).then((data) => {
