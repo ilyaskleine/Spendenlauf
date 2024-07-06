@@ -20,12 +20,22 @@
             <div class="box">
               <h2>Aktueller Lauf</h2>
               <button class="floating-button" v-on:click="update">Refresh</button>
-              <button v-bind:class="{negativ: !correctionMode}" v-on:click="correctionMode = !correctionMode">Korrekturmodus</button>
-                <div class="dropdownMenu">
-                  <select v-model="selectedRun" class="selectCN">
-                    <option v-for="run in runs" :value="run">{{run.title}}</option>
-                  </select>
-                </div>
+              <p>Wähle erst die aktuelle Runde aus:</p>
+              <div class="dropdownMenu">
+                <select v-model="selectedRun" class="selectCN">
+                  <option v-for="run in runs" :value="run">{{run.title}}</option>
+                </select>
+              </div>
+              <div class="input-method">
+                <h3>Manuelle Eingabe</h3>
+                <label for="id"><span>Läufer-ID</span></label>
+                <input type="number" name="id" id="id"><br>
+                <button style="margin-top: 15px">Runde zählen</button>
+              </div>
+              </div>
+              <div class="input-method">
+                <h3>Eingabe über Buttons</h3>
+                <button v-bind:class="{negativ: !correctionMode}" v-on:click="correctionMode = !correctionMode">Korrekturmodus</button>
                 <div class="runner-container" v-if="selectedRun">
                     <div class="runner" v-for="runner in selectedRun.runners" v-on:click="addOrRemove(runner.number)" v-bind:class="{remove: correctionMode}">
                         <div class="number">{{runner.number}}</div>
@@ -33,6 +43,7 @@
                         <div class="rounds"><i><b>{{ runner.rounds }}</b> {{rundenString(runner.rounds)}}</i></div>
                     </div>
                 </div>
+              </div>
             </div>
             <div class="box">
                 <h2>Logbuch</h2>

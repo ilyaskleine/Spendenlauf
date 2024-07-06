@@ -26,10 +26,23 @@
     margin-top: 5px;
 }
 
+.runner:hover {
+    background-color: lightgreen;
+}
+
 .remove {
     background-color: lightcoral;
 }
 
 .negativ {
     color: red;
+}
+
+.input-method {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
 }
