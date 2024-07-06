@@ -98,24 +98,25 @@ function getRunsWithRunners(callback) {
     getAllRuns((err, runs) => {
         if (err) return callback(err, null)
         runCount = 0;
+        results = []
         for (var run of runs) {
             runCount++;
-            (function(runCountCopy) { pool.query("SELECT laeufer.* FROM run, jahrgang, class, laeufer "
+            (function(runCopy, runCountCopy) { pool.query("SELECT laeufer.* FROM run, jahrgang, class, laeufer "
                 + "WHERE laeufer.class_id = class.id "
                 + "AND class.jahrgang_id = jahrgang.id "
                 + "AND (run.jahrgang_1 = jahrgang.id OR run.jahrgang_2 = jahrgang.id) "
-                + "AND run.id = " + pool.escape(run.id) + ';',
+                + "AND run.id = " + pool.escape(runCopy.id) + ';',
                 (err, runners) => {
                     if (err) return callback(err, null)
-                    run.runners = runners
-                    console.log(runCountCopy, runs.length)
+                    runCopy.runners = runners
+                    results.push(runCopy)
                     if (runCountCopy >= runs.length) {
-                        console.log(runs)
-                        callback(null, runs)
+                        console.log(results)
+                        callback(null, results)
                     }
                 })
             }
-            )(runCount)
+            )(run, runCount)
         }
     })
    
@@ -168,10 +169,13 @@ function calcTotal(callback) {
 }
 
 function calcAll(callback) {
-    calcJahrgaenge(err => {
-        if (err) return callback(err);
-        calcTotal(totalErr => {
-            callback(totalErr)
+    calcClasses(classErr => {
+        if (classErr) return callback(classErr)
+        calcJahrgaenge(err => {
+            if (err) return callback(err);
+            calcTotal(totalErr => {
+                callback(totalErr)
+            })
         })
     })
 }
