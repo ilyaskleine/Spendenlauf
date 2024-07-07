@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spendenlauf</title>
+    <link rel="icon" type="image/x-icon" href="/img/smv.png">
     <link href="/css/main.css" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,13 +14,19 @@
 <header><b>Spendenlauf 2024</b></header>
 <body>
     <div class="container">
-        <p>Wilkommen auf der Verwaltungsseite des Spendenlaufs!</p>
+        <p>Wilkommen auf der Seite des Spendenlauf der SMV!</p>
+        <div id="admin" class="section">
+            <h2>Öffentliche Seiten</h2>
+            <button id="to-live">Live-Ansicht</button>
+        </div>
         <div id="admin" class="section">
             <h2>Du bist Admin?</h2>
-            <button id="to-admin">Zum Adminbereich</button>
-            <button id="to-live">Live-Ansicht</button>
-            <button id="logout">Admin ausloggen</button>
+            <button id="to-admin">Admin-Bereich</button>
+            <button class="btn-red" id="logout">Ausloggen</button>
         </div>
+    </div>
+    <div class="footer">
+        <p>© 2024 Ilyas Kleine</p><p>|</p><p><a href="https://github.com/ilyaskleine/Spendenlauf">Über diese Website</a></p><p>|</p><p><a href="tel:1722772306">Technischer Support</a></p>
     </div>
 </body>
 <script type="text/javascript">

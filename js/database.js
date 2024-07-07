@@ -58,22 +58,36 @@ function getRunnerStruct(callback) {
     })
 }
 
-function createRunner(name, per_round, jahrgang_id, class_id, callback) {
+function createRunner(name, per_round, class_id, callback) {
     if (!per_round) per_round = 0
-    const number = 0;
-    validateRunnerID(number, idIsValid => {
-        if (idIsValid) {
-            pool.query("INSERT INTO laeufer (name, per_round, class_id) VALUES (" 
-                    + pool.escape(name) + ", " 
-                    + pool.escape(per_round) + ", " 
-                    + pool.escape(class_id) + ");", (err, results) => {
-                        callback(err)
-                    })
+    pool.query("SELECT * FROM laeufer WHERE class_id = " + pool.escape(class_id) + " AND name = " + pool.escape(name) + ";", (err, results) => {
+        if (err) return callback(err, null);
+        if (results.length == 1) {
+            pool.query("UPDATE laeufer SET per_round = per_round + " + pool.escape(per_round) + ", sponsors = sponsors + 1 WHERE number = " + pool.escape(results[0].number) + ";"
+                , (err, results) => {
+                    if (err) return callback(err, null);
+                    callback(null, "Nutzer existiert bereits. Der Betrag wurde daher addiert.")
+                }
+            );
         } else {
-            callback('Läufer-ID bereits belegt.')
+            const number = 0;
+            validateRunnerID(number, idIsValid => {
+                if (idIsValid) {
+                    pool.query("INSERT INTO laeufer (name, per_round, class_id) VALUES (" 
+                            + pool.escape(name) + ", " 
+                            + pool.escape(per_round) + ", " 
+                            + pool.escape(class_id) + ");", (err, results) => {
+                                if (err) return callback(err, null)
+                                callback(null, null)
+                            })
+                } else {
+                    callback('Läufer-ID bereits belegt.')
+                }
+            })
         }
     })
 }
+
 
 function deleteRunner(number, callback) {
     pool.query("DELETE FROM laeufer WHERE number = " + pool.escape(number) + ";", (err, results) => {
@@ -111,7 +125,6 @@ function getRunsWithRunners(callback) {
                     runCopy.runners = runners
                     results.push(runCopy)
                     if (runCountCopy >= runs.length) {
-                        console.log(results)
                         callback(null, results)
                     }
                 })

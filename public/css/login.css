@@ -45,7 +45,7 @@ body {
 
 button {
     border: none;
-    color: #fff;
+    color: #fff !important;
     margin: 1rem 0;
     font-size: 18px;
     padding: 0.5rem;
