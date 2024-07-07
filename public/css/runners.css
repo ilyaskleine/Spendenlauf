@@ -16,10 +16,6 @@ body {
     flex-wrap: wrap;
 }
 
-.box {
-    margin-right: 100px;
-}
-
 .removable:hover {
     color: white;
     cursor: pointer;
@@ -29,4 +25,20 @@ body {
 
 .euro::after {
     content: " €"
+}
+
+#output {
+    background: #16e33131;
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #16e331;
+    margin: 1.5rem 0;
+    border-style: solid;
+    border-width: 1px;
+    text-align: center;
+    width: 90%;
+  }
+
+.dropdownMenu {
+    margin-bottom: 10px;
 }

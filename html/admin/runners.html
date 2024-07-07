@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Läuferverwaltung</title>
+    <link rel="icon" type="image/x-icon" href="/img/smv.png">
     <link href="/css/main.css" rel="stylesheet" type="text/css">
     <link href="/css/runners.css" rel="stylesheet" type="text/css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,7 +21,7 @@
             <div class="box">
               <h2>Jahrgang-Übersicht</h2>
               <button class="floating-button" v-on:click="update">Refresh</button>
-                <div class="dropdownMenu">
+                <div class="dropdownMenu custom-select">
                   <select v-model="selectedJahrgang" class="selectCN">
                     <option v-for="jahrgang in jahrgaenge" :value="jahrgang">{{jahrgang.name}}</option>
                   </select>
@@ -35,6 +36,7 @@
                       <th>Nr.</th>
                       <th>Läufer</th> 
                       <th>Rudenbetrag</th>
+                      <th>Sponsoren</th>
                       <th>Runden</th>
                       <th>Gesammt (berechnet)</th>
                     </tr>
@@ -42,6 +44,7 @@
                       <td>{{runner.number}}</td>
                       <td class="removable" v-on:click="deleteRunner(runner.number)">{{runner.name}}</td> 
                       <td class="table-right euro">{{formatEuro(runner.per_round)}}</td>
+                      <td class="table-right">{{runner.sponsors}}</td>
                       <td class="table-right">{{runner.rounds}}</td>
                       <td class="table-right euro" style="color: green">{{formatEuro(runner.amount_raised)}}</td>
                     </tr>
@@ -57,6 +60,7 @@
             </div>
             <div id="form" class="box">
               <h2>Neuen Läufer anlegen</h2>
+              <p id="output" v-if="output">{{ output }}</p> 
               <label for="name"><span>Name</span></label>
               <input type="text" name="name" id="name">
               <label for="per_round"><span>Betrag pro Runde</span></label>

@@ -18,10 +18,6 @@ body {
     flex-wrap: wrap;
 }
 
-.box {
-    margin-right: 100px;
-}
-
 .removable:hover {
     color: white;
     cursor: pointer;

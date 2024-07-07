@@ -13,6 +13,12 @@ html {
     border-radius: 12px;
     margin-left: 1rem;
     margin-right: 1rem;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
+}
+
+.box {
+    margin-right: 100px;
+    margin-bottom: 40px;
 }
 
 table, th, td {
@@ -41,11 +47,16 @@ th, td {
 
 button {
     background-color: #a688fa;
+    color: black;
     border-style: none;
     padding: 10px;
     border-radius: 10px;
     margin-right: 10px;
     font-size: 0.8rem;
+}
+
+.btn-red {
+    background-color: lightcoral;
 }
 
 header {
@@ -60,10 +71,66 @@ header {
     padding: 1rem 30px;
 }
 
+.custom-select {
+    min-width: 350px;
+  }
+  
+  select {
+    appearance: none;
+    /* safari */
+    -webkit-appearance: none;
+    /* other styles for aesthetics */
+    font-size: 0.9rem;
+    padding: 0.5em 3em 0.5em 1em;
+    background-color: #fff;
+    border: 1px solid #caced1;
+    border-radius: 0.25rem;
+    color: #000;
+    cursor: pointer;
+  }
+
+.footer {
+    background-color: #1a16255e;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    padding-left: 2rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.footer p {
+    display: inline;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+}
+
+a {
+    color: lightblue
+}
+
 @media only screen and (max-width: 992px) {
     header {
         position: fixed;
         top: 0;
         width: 100%;
+    }
+
+    button {
+        margin-bottom: 10px;
+    }
+
+    .footer {
+        padding-left: 1.8rem;
+        padding-bottom: 0.6rem;
+        padding-top: 0.4rem;
+    }
+    
+    .footer p {
+        margin-right: 7px;
+        font-size: 0.4rem;
     }
 }

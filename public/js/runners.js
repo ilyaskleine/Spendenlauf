@@ -3,7 +3,8 @@ app = new Vue({
     data: {
         jahrgaenge: [],
         selectedJahrgang: null,
-        selectedClass: null
+        selectedClass: null,
+        output: null
     },
     methods: {
         update: function() {
@@ -36,6 +37,7 @@ app = new Vue({
             });
         },
         create: function() {
+            vue = this;
             input = {
                 name: document.getElementById('name').value,
                 per_round: document.getElementById('per_round').value,
@@ -46,6 +48,12 @@ app = new Vue({
             postAPI("/api/admin/runner", input).then((data) => {
                 console.log(data)
                 if (data.success == true) this.update();
+                vue.output = data.output;
+                setTimeout(function () {
+                    if (vue.output == data.output) {
+                        vue.output = null;
+                    }
+                }, 3000);
             })
         },
         deleteRunner: function(number) {
@@ -56,7 +64,11 @@ app = new Vue({
             })
         },
         formatEuro: function(value) {
-            return value.toFixed(2).replaceAll('.', ',')
+            if (value) {
+                return value.toFixed(2).replaceAll('.', ',')
+            } else {
+                return "0,00"
+            }
         }
     },
     mounted: function() {
