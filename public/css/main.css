@@ -75,19 +75,20 @@ header {
     min-width: 350px;
   }
   
-  select {
+select {
     appearance: none;
     /* safari */
     -webkit-appearance: none;
     /* other styles for aesthetics */
     font-size: 0.9rem;
-    padding: 0.5em 3em 0.5em 1em;
+    padding: 0.3em 0.5em 0.3em 0.7em;
     background-color: #fff;
-    border: 1px solid #caced1;
+    border: 2px solid gray;
     border-radius: 0.25rem;
     color: #000;
     cursor: pointer;
-  }
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
 
 .footer {
     background-color: #1a16255e;
