@@ -4,7 +4,8 @@ app = new Vue({
         jahrgaenge: [],
         selectedJahrgang: null,
         selectedClass: null,
-        output: null
+        output: null,
+        fixed: false
     },
     methods: {
         update: function() {
@@ -42,7 +43,8 @@ app = new Vue({
                 name: document.getElementById('name').value,
                 per_round: document.getElementById('per_round').value,
                 jahrgang_id: this.selectedJahrgang.id,
-		class_id: this.selectedClass.id
+		class_id: this.selectedClass.id,
+                fixed: this.fixed
             }
             console.log(input)
             postAPI("/api/admin/runner", input).then((data) => {
@@ -57,7 +59,14 @@ app = new Vue({
             })
         },
         deleteRunner: function(number) {
-            console.log(number)
+            msg = "Löschen temporär gesperrt um versehendlichen Datenverlust zu verhindern."
+            vue.output = msg
+            setTimeout(function () {
+                if (vue.output == msg) {
+                    vue.output = null;
+                }
+            }, 10000);
+            return
             deleteAPI("/api/admin/runner", {number: number}).then((data) => {
                 console.log(data)
                 this.update()

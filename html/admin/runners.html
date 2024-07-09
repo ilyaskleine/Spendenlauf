@@ -43,7 +43,7 @@
                     <tr v-for="runner in selectedClass.runners">
                       <td>{{runner.number}}</td>
                       <td class="removable" v-on:click="deleteRunner(runner.number)">{{runner.name}}</td> 
-                      <td class="table-right euro">{{formatEuro(runner.per_round)}}</td>
+                      <td class="table-right euro" v-bind:class="{fixed: runner.festbetrag}">{{formatEuro(runner.per_round)}}</td>
                       <td class="table-right">{{runner.sponsors}}</td>
                       <td class="table-right">{{runner.rounds}}</td>
                       <td class="table-right euro" style="color: green">{{formatEuro(runner.amount_raised)}}</td>
@@ -61,10 +61,14 @@
             <div id="form" class="box">
               <h2>Neuen Läufer anlegen</h2>
               <p id="output" v-if="output">{{ output }}</p> 
-              <label for="name"><span>Name</span></label>
+              <label for="name" class="label"><span>Name</span></label>
               <input type="text" name="name" id="name">
-              <label for="per_round"><span>Betrag pro Runde</span></label>
+              <label for="per_round" class="label"><span>Betrag pro Runde</span></label>
               <input type="number" name="per_round" id="per_round"><br>
+              <div class="checkbox">
+                <input v-model="fixed" type="checkbox" name="fixed" id="fixed">
+                <label for="fixed" style="margin-left: 10px;"><span>Festbetrag</span></label><br>
+              </div>  
               <button style="margin-top: 15px" v-on:click="create">Anlegen</button>
             </div>
           </div>                   

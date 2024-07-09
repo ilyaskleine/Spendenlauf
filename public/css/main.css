@@ -113,6 +113,10 @@ a {
     color: lightblue
 }
 
+.checkbox {
+    margin-top: 15px;
+}
+
 @media only screen and (max-width: 992px) {
     header {
         position: fixed;
