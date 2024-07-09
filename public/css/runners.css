@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400&display=swap');
 
-#form label {
+.label {
     display: block;
     margin-top: 15px;
 }
@@ -37,8 +37,13 @@ body {
     border-width: 1px;
     text-align: center;
     width: 90%;
+    max-width: 300px;
   }
 
 .dropdownMenu {
     margin-bottom: 10px;
+}
+
+.fixed {
+    background-color: lightblue;
 }

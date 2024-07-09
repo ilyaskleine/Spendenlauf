@@ -31,11 +31,13 @@ app = new Vue({
         addRound: function(number) {
             putAPI("/api/admin/round", {number: number}).then((data) => {
                 this.addToLog("Runde für Läufer " + number + " hinzugefügt.")
+                console.log(data)
                 this.update()
             })
         },
         removeRound: function(number) {
             deleteAPI("/api/admin/round", {number: number}).then((data) => {
+                console.log(data)
                 this.addToLog("Runde für Läufer " + number + " entfernt.")
                 this.correctionMode = false
                 this.update()

@@ -58,7 +58,7 @@ function getRunnerStruct(callback) {
     })
 }
 
-function createRunner(name, per_round, class_id, callback) {
+function createRunner(name, per_round, class_id, fixed, callback) {
     if (!per_round) per_round = 0
     pool.query("SELECT * FROM laeufer WHERE class_id = " + pool.escape(class_id) + " AND name = " + pool.escape(name) + ";", (err, results) => {
         if (err) return callback(err, null);
@@ -73,10 +73,11 @@ function createRunner(name, per_round, class_id, callback) {
             const number = 0;
             validateRunnerID(number, idIsValid => {
                 if (idIsValid) {
-                    pool.query("INSERT INTO laeufer (name, per_round, class_id) VALUES (" 
+                    pool.query("INSERT INTO laeufer (name, per_round, class_id, festbetrag) VALUES (" 
                             + pool.escape(name) + ", " 
-                            + pool.escape(per_round) + ", " 
-                            + pool.escape(class_id) + ");", (err, results) => {
+                            + pool.escape(per_round) + ", "
+                            + pool.escape(class_id) + ", "
+                            + pool.escape(fixed) + ");", (err, results) => {
                                 if (err) return callback(err, null)
                                 callback(null, null)
                             })
@@ -138,18 +139,44 @@ function getRunsWithRunners(callback) {
 // -------- ROUNDS --------
 
 function addRound(runner_number, callback) {
-    pool.query("UPDATE laeufer SET rounds = rounds + 1, amount_raised = rounds * per_round WHERE number = " 
-    + pool.escape(runner_number) + ";", (err, results) => {
-        if (err) return callback(err);
-        calcAll(callback)
+    pool.query("SELECT festbetrag FROM laeufer WHERE number = " + pool.escape(runner_number) + ";", (err, results) => {
+        if (err) return callback(err)
+        if (results.length !== 1) return callback("Runner not found or not explicit.")
+        if (results[0].festbetrag) {
+            pool.query("UPDATE laeufer SET rounds = rounds + 1, amount_raised = per_round WHERE number = " 
+            + pool.escape(runner_number) + ";", (err, results) => {
+                if (err) return callback(err);
+                calcAll(callback)
+            })
+        } else {
+            pool.query("UPDATE laeufer SET rounds = rounds + 1, amount_raised = rounds * per_round WHERE number = " 
+            + pool.escape(runner_number) + ";", (err, results) => {
+                if (err) return callback(err);
+                calcAll(callback)
+            })
+        }
     })
 }
 
 function removeRound(runner_number, callback) {
-    pool.query("UPDATE laeufer SET rounds = rounds - 1, amount_raised = rounds * per_round WHERE number = " 
-    + pool.escape(runner_number) + ";", (err, results) => {
-        if (err) return callback(err);
-        calcAll(callback)
+    pool.query("SELECT * FROM laeufer WHERE number = " + pool.escape(runner_number) + ";", (err, results) => {
+        if (err) return callback(err)
+        if (results.length !== 1) return callback("Runner not found or not explicit.")
+        if (results[0].festbetrag) {
+            var newValue = results[0].rounds < 2 ? 0 : results[0].per_round
+            console.log(newValue)
+            pool.query("UPDATE laeufer SET rounds = rounds - 1, amount_raised = " + pool.escape(newValue) + " WHERE number = " 
+            + pool.escape(runner_number) + ";", (err, results) => {
+                if (err) return callback(err);
+                calcAll(callback)
+            })
+        } else {
+            pool.query("UPDATE laeufer SET rounds = rounds - 1, amount_raised = rounds * per_round WHERE number = " 
+            + pool.escape(runner_number) + ";", (err, results) => {
+                if (err) return callback(err);
+                calcAll(callback)
+            })
+        }
     })
 }
 
