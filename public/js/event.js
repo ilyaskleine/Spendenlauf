@@ -3,7 +3,18 @@ app = new Vue({
     data: {
         runs: [],
         selectedRun: null,
-        correctionMode: false
+        correctionMode: false,
+        log: []
+    },
+    computed: {
+        runnersSorted: function() {
+            runners = this.selectedRun.runners
+            runners.sort(function(a, b) { 
+                return a.number - b.number;
+            });
+            console.log(runners)
+            return runners
+        }
     },
     methods: {
         update: function() {
@@ -28,9 +39,24 @@ app = new Vue({
                 console.error('Error:', error);
             });
         },
+        addLog: function(number) {
+            this.log.push({text: "Runde hinzugefügt.", id: number})
+            if (this.log.length > 3) {
+                this.log.shift()
+            }
+        },
+        addRoundGetID: function() {
+            var number = document.getElementById('id').value
+            putAPI("/api/admin/round", {number: number}).then((data) => {
+                this.addLog(number)
+                console.log(data)
+                document.getElementById('id').value = "",
+                this.update()
+            })
+        },
         addRound: function(number) {
             putAPI("/api/admin/round", {number: number}).then((data) => {
-                this.addToLog("Runde für Läufer " + number + " hinzugefügt.")
+                this.addLog(number)
                 console.log(data)
                 this.update()
             })
@@ -38,10 +64,15 @@ app = new Vue({
         removeRound: function(number) {
             deleteAPI("/api/admin/round", {number: number}).then((data) => {
                 console.log(data)
-                this.addToLog("Runde für Läufer " + number + " entfernt.")
                 this.correctionMode = false
                 this.update()
             })
+        },
+        revert: function(index) {
+            entry = this.log[index]
+            console.log(index, entry)
+            this.removeRound(entry.id)
+            this.log.splice(index, 1)
         },
         addOrRemove: function(number) {
             if (this.correctionMode) {
@@ -55,19 +86,16 @@ app = new Vue({
         },
         formatEuro: function(value) {
             return value.toFixed(2).replaceAll('.', ',')
-        },
-        addToLog: function(text) {
-            var now = new Date()
-            const timestring = now.getHours() + ' : ' + now.getMinutes() + ' : ' + now.getSeconds()
-            log = this.getLog()
-            log[timestring] = text
-            localStorage.log = JSON.stringify(log)
-        },
-        getLog: function() {
-            return localStorage.log ? JSON.parse(localStorage.log) : {}
         }
     },
     mounted: function() {
         this.update()
+
+        vue = this
+        document.getElementById("id").addEventListener("keyup", function(event) {
+            if (event.key === "Enter" || event.keyCode === 13) {
+                vue.addRoundGetID()
+            }
+        });
     }
 });
