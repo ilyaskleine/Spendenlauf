@@ -164,7 +164,6 @@ function removeRound(runner_number, callback) {
         if (results.length !== 1) return callback("Runner not found or not explicit.")
         if (results[0].festbetrag) {
             var newValue = results[0].rounds < 2 ? 0 : results[0].per_round
-            console.log(newValue)
             pool.query("UPDATE laeufer SET rounds = rounds - 1, amount_raised = " + pool.escape(newValue) + " WHERE number = " 
             + pool.escape(runner_number) + ";", (err, results) => {
                 if (err) return callback(err);
