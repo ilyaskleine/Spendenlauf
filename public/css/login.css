@@ -12,7 +12,7 @@ body {
     justify-content: center;
 }
 
-.box {
+.login-box {
     width: 20rem;
     margin: 1rem;
     padding: 2rem 1rem;
@@ -25,17 +25,17 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.9);
 }
 
-.box form {
+.login-box form {
     display: flex;
     flex-direction: column;
 }
 
-.box form label {
+.login-box form label {
     width: 100%;
     margin-bottom: 5px;
 }
 
-.box form input {
+.login-box form input {
     width: 16rem;
     outline: none;
     padding: 5px 10px;
