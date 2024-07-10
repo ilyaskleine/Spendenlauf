@@ -51,6 +51,13 @@
                       <td class="table-right euro" style="color: green">{{formatEuro(runner.amount_raised)}}</td>
                     </tr>
                 </table>
+                <div v-if="downloadLoading">
+                  <p><i>Generating... </i></p>
+                </div>
+                <div v-else>
+                  <button style="margin-top: 15px" v-on:click="generatePDF">PDF dieser Klasse generieren</button>
+                  <button style="margin-top: 15px; background-color: lightgreen;" v-if="downloadFilename && selectedClass == downloadClass"><a v-bind:href="'/admin/pdf/' + downloadFilename" v-bind:download="downloadFilename">Download</a></button>
+                </div>
                 <table v-if="selectedJahrgang">
                     <tr>
                       <th>JAHRGANG GESAMMT</th>

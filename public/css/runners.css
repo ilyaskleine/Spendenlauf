@@ -42,3 +42,7 @@ body {
 .fixed {
     background-color: lightblue;
 }
+
+button a {
+    color: black;
+}
