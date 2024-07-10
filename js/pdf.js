@@ -24,12 +24,14 @@ function formatEuro(value) {
   function makeRunnerPDF(runners) {
     var content = []
 
+    var counter = 0;
     for (var runner of runners) {
+        counter++;
         var firstName = runner.name.split(" ")[0]
         var perRound = formatEuro(runner.per_round)
         var total = formatEuro(runner.amount_raised)
         content.push({text: 'Ergebnisse des Spendenlaufs', style: 'subheader'},
-        "Hallo " + firstName + ",", "Danke für deine Teilnahme am diesjährgen Spendenlauf! Nachdem nun alle fleißig ihre Runden gelaufen sind, ist unten für dich aufgelistet, wie viele Runden du selbst gelaufen bist und was dein Spendenbetrag ist.\n\n",
+        "Hallo " + firstName + ",", "Danke für deine Teilnahme am diesjährgen Spendenlauf! Nachdem du nun fleißig deine Runden gelaufen bist, ist unten deine Anzahl an Runden und dein Spendenbetrag aufgelistet.\n\n",
         {
             alignment: 'justify',
             columns: [
@@ -55,6 +57,9 @@ function formatEuro(value) {
         },
         "\nBitte bring den Spendenbetrag in einer der dafür vorgesehen Pausen zum SMV-Stand.",
         "\nEs dankt, deine SMV!")
+        if (counter >= 3) {
+            content.push({ text: '', fontSize: 1, pageBreak: 'after', margin: [0, 0, 0, 0] })
+        }
     }
 
 
@@ -72,7 +77,7 @@ function formatEuro(value) {
             subheader: {
                 fontSize: 16,
                 bold: true,
-                margin: [0, 10, 0, 5]
+                margin: [0, 20, 0, 5]
             }
         },
         defaultStyle: {
