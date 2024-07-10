@@ -5,7 +5,10 @@ app = new Vue({
         selectedJahrgang: null,
         selectedClass: null,
         output: null,
-        fixed: false
+        fixed: false,
+        downloadFilename: null,
+        downloadClass: null,
+        downloadLoading: false
     },
     methods: {
         update: function() {
@@ -78,6 +81,16 @@ app = new Vue({
             } else {
                 return "0,00"
             }
+        },
+        generatePDF: function() {
+            vue = this
+            this.downloadLoading = true
+            postAPI("/api/admin/pdf/runners", {class: this.selectedClass.id}).then((data) => {
+                if (data.sucess == false) return;
+                vue.downloadFilename = data.filename
+                vue.downloadLoading = false
+                vue.downloadClass = vue.selectedClass
+            })
         }
     },
     mounted: function() {

@@ -10,6 +10,7 @@ var fs = require('fs');
 
 var db = require('./js/database')
 var auth = require('./js/authentication');
+var pdf = require('./js/pdf')
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -61,6 +62,7 @@ function checkAdmin(req, res, next) {
 }
 
 app.use('/admin', checkAdmin)
+app.use('/admin', express.static('admin'))
 
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '/html/admin.html'));
@@ -188,6 +190,15 @@ app.delete('/api/admin/round', (req, res) => {
     } else {
       res.json({success: true})
     }
+  })
+})
+
+app.post('/api/admin/pdf/runners', (req, res) => {
+  db.getRunnersOfClass(req.body.class, (err, results) => {
+    if (err) return res.status(500).json({success: false, error: err})
+    if(results < 1) return res.json({success: false, error: "No runners in class."})
+    var filename = pdf.makeRunnerPDF(results);
+    res.json({success: true, filename: filename})
   })
 })
 
