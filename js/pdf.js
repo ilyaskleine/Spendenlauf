@@ -59,7 +59,8 @@ function formatEuro(value) {
         "\nEs dankt, deine SMV!")
         if (counter >= 3) {
             content.push({ text: '', fontSize: 1, pageBreak: 'after', margin: [0, 0, 0, 0] })
-        }
+            counter = 0
+        }   
     }
 
 
