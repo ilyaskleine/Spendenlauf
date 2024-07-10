@@ -29,6 +29,12 @@ function getAllJahrgaenge(callback) {
     pool.query("SELECT * FROM jahrgang;", callback)
 }
 
+function getRunnersOfClass(classID, callback) {
+    pool.query("select class.name as class, laeufer.name, per_round, rounds, laeufer.amount_raised from class, laeufer where laeufer.class_id = class.id and class.id = " + pool.escape(classID) + ";",
+        callback
+    )
+}
+
 function getRunnerStruct(callback) {
     getAllRunners((runners_err, runners) => {
         if (runners_err) return callback(runners_err, null)
@@ -262,6 +268,7 @@ module.exports = {
     createRun: createRun,
     getAllRuns: getAllRuns,
     getRunsWithRunners: getRunsWithRunners,
+    getRunnersOfClass: getRunnersOfClass,
 
     addRound: addRound,
     removeRound: removeRound,
