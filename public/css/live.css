@@ -2,6 +2,10 @@ html {
     background-color: #1a1625;
 }
 
+body {
+    overflow: hidden;
+}
+
 .count-container {
     width: 100%;
     height: 100vh;

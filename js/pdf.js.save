@@ -28,7 +28,6 @@ function formatEuro(value) {
     for (var runner of runners) {
 	if (runner.rounds > 0) {
 	        counter++;
-		var roundText = runner.festbetrag ? "Festbetrag:  " : "Betrag pro Runde:  "
         	var firstName = runner.name.split(" ")[0]
 	        var perRound = formatEuro(runner.per_round)
         	var total = formatEuro(runner.amount_raised)
@@ -43,15 +42,14 @@ function formatEuro(value) {
 	                },
 	                {
         	            text: [
-				{text: 'ID:  ', bold: true},
-				runner.number + '\n',
                 	        {text: 'Klasse:  ', bold: true},
                         	runner.class + '\n',
+				{text: 'ID:  ', bold: true),
 	                        {text: 'Name:  ', bold: true},
         	                runner.name + '\n\n',
-                	        {text: 'Runden:  ', bold: true},
+                	        {text: 'Runden gelaufen:  ', bold: true},
                         	runner.rounds + '\n',
-	                        {text: roundText, bold: true},
+	                        {text: 'Betrag pro Runde:  ', bold: true},
         	                perRound + ' €\n',
 	                        {text: 'SPENDENBETRAG:  ', bold: true},
         	                total + ' €',
@@ -83,7 +81,7 @@ function formatEuro(value) {
             subheader: {
                 fontSize: 16,
                 bold: true,
-                margin: [0, 15, 0, 5]
+                margin: [0, 20, 0, 5]
             }
         },
         defaultStyle: {

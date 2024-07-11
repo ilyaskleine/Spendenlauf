@@ -30,7 +30,7 @@ function getAllJahrgaenge(callback) {
 }
 
 function getRunnersOfClass(classID, callback) {
-    pool.query("select class.name as class, laeufer.name, per_round, rounds, laeufer.amount_raised from class, laeufer where laeufer.class_id = class.id and class.id = " + pool.escape(classID) + ";",
+    pool.query("select class.name as class, laeufer.name, laeufer.number, per_round, rounds, laeufer.amount_raised, laeufer.festbetrag from class, laeufer where laeufer.class_id = class.id and class.id = " + pool.escape(classID) + ";",
         callback
     )
 }
