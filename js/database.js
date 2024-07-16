@@ -97,10 +97,15 @@ function createRunner(name, per_round, class_id, fixed, callback) {
 
 
 function deleteRunner(number, callback) {
-    pool.query("DELETE FROM laeufer WHERE number = " + pool.escape(number) + ";", (err, results) => {
-        if (err) return callback(err);
-        calcAll(callback);
-    })
+    if (process.env.DISABLED_DELETION == 0) {
+        pool.query("DELETE FROM laeufer WHERE number = " + pool.escape(number) + ";", (err, results) => {
+            if (err) return callback(err);
+            calcAll(callback);
+        })
+    } else {
+        callback("ERR: Deletion disabled!")
+    }
+    
 }
 
 // -------- RUNS --------
@@ -183,6 +188,22 @@ function removeRound(runner_number, callback) {
             })
         }
     })
+}
+
+function getPaymentData(number, callback) {
+    pool.query('SELECT * FROM laeufer WHERE number = ' + pool.escape(number) + ';', (err, results) => {
+        if (err) return callback(err, null)
+        if (results.length < 1) return callback("Kein Läufer mit dieser ID", null)
+        var runner = results[0]
+        var pending = runner.payed ? 0 : runner.amount_raised
+        return callback(null, {name: runner.name, number: runner.number, pending: pending})
+    })
+}
+
+function setPayed(number, callback) {
+    pool.query('UPDATE laeufer SET payed = 1 WHERE number = ' + pool.escape(number) + ';', (err, results) => {
+        callback(err)
+    }) 
 }
 
 // -------- TOTAL FOR DASHBOARD --------
@@ -272,6 +293,9 @@ module.exports = {
 
     addRound: addRound,
     removeRound: removeRound,
+
+    getPaymentData: getPaymentData,
+    setPayed: setPayed,
 
     getTotal: getTotal,
 
