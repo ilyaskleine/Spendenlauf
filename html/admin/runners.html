@@ -44,7 +44,7 @@
                     </tr>
                     <tr v-for="runner in selectedClass.runners">
                       <td>{{runner.number}}</td>
-                      <td class="removable" v-on:click="deleteRunner(runner.number)">{{runner.name}}</td> 
+                      <td class="removable" v-bind:class="{payed: runner.payed}" v-on:click="deleteRunner(runner.number)">{{runner.name}}</td> 
                       <td class="table-right euro" v-bind:class="{fixed: runner.festbetrag}">{{formatEuro(runner.per_round)}}</td>
                       <td class="table-right">{{runner.sponsors}}</td>
                       <td class="table-right">{{runner.rounds}}</td>
@@ -68,17 +68,30 @@
                 </table>
             </div>
             <div id="form" class="box">
-              <h2>Neuen Läufer anlegen</h2>
-              <p id="output" v-if="output">{{ output }}</p> 
-              <label for="name" class="label"><span>Name</span></label>
-              <input type="text" name="name" id="name">
-              <label for="per_round" class="label"><span>Betrag pro Runde</span></label>
-              <input type="number" name="per_round" id="per_round"><br>
-              <div class="checkbox">
-                <input v-model="fixed" type="checkbox" name="fixed" id="fixed">
-                <label for="fixed" style="margin-left: 10px;"><span>Festbetrag</span></label><br>
-              </div>  
-              <button style="margin-top: 15px" v-on:click="create">Anlegen</button>
+              <div v-if="!payment">
+                <h2>Neuen Läufer anlegen</h2>
+                <p id="output" v-if="output">{{ output }}</p> 
+                <label for="name" class="label"><span>Name</span></label>
+                <input type="text" name="name" id="name">
+                <label for="per_round" class="label"><span>Betrag pro Runde</span></label>
+                <input type="number" name="per_round" id="per_round"><br>
+                <div class="checkbox">
+                  <input v-model="fixed" type="checkbox" name="fixed" id="fixed">
+                  <label for="fixed" style="margin-left: 10px;"><span>Festbetrag</span></label><br>
+                </div>  
+                <button style="margin-top: 15px" v-on:click="create">Anlegen</button>
+              </div>
+              <div v-else style="margin-top: 30px;">
+                <h2>Bezahlung</h2>
+                <p v-if="paymentError" id="error">{{paymentError}}</p> 
+                <label for="runneId" class="label"><span>Läufer-ID</span></label> 
+                <input style="margin-right: 15px;" type="number" name="runnerId" id="runnerId"><button class="buttonSmall" v-on:click="getPaymentData">Abrufen</button><br>
+                <div v-if="paymentData">
+                  <p><b>Name: </b>{{paymentData.name}}</p>
+                  <p><b>Ausstehender Betrag: </b>{{formatEuro(paymentData.pending)}} €</p>
+                  <button style="background-color: lightgreen;" v-on:click="setPayment">Bezahlung bestätigen</button>
+                </div>
+              </div>
             </div>
           </div>                   
         <div>

@@ -8,13 +8,19 @@ app = new Vue({
         fixed: false,
         downloadFilename: null,
         downloadClass: null,
-        downloadLoading: false
+        downloadLoading: false,
+        deletionDisabled: false,
+        payment: false,
+        paymentError: null,
+        paymentData: null
     },
     methods: {
         update: function() {
             vue = this;
-            document.getElementById('name').value = "",
-            document.getElementById('per_round').value = "",
+            if (!this.payment) {
+                document.getElementById('name').value = ""
+                document.getElementById('per_round').value = ""
+            }
             fetch('/api/admin/jahrgaenge')
             .then(response => {
                 if (!response.ok) {
@@ -24,6 +30,8 @@ app = new Vue({
             })
             .then(data => {
                 this.jahrgaenge = data.results;
+                this.deletionDisabled = !!+data.deletionDisabled
+                this.payment = !!+data.payment
                 console.log(this.jahrgaenge)
                 if (!this.selectedJahrgang) {
                     this.selectedJahrgang = this.jahrgaenge[0];
@@ -62,14 +70,16 @@ app = new Vue({
             })
         },
         deleteRunner: function(number) {
-            msg = "Löschen temporär gesperrt um versehendlichen Datenverlust zu verhindern."
-            vue.output = msg
-            setTimeout(function () {
-                if (vue.output == msg) {
-                    vue.output = null;
-                }
-            }, 10000);
-            return
+            if (this.deletionDisabled) {
+                msg = "Löschen temporär gesperrt um versehendlichen Datenverlust zu verhindern."
+                vue.output = msg
+                setTimeout(function () {
+                    if (vue.output == msg) {
+                        vue.output = null;
+                    }
+                }, 10000);
+                return
+            }
             deleteAPI("/api/admin/runner", {number: number}).then((data) => {
                 console.log(data)
                 this.update()
@@ -91,22 +101,59 @@ app = new Vue({
                 vue.downloadLoading = false
                 vue.downloadClass = vue.selectedClass
             })
+        },
+        getPaymentData: function() {
+            console.log(this.paymentError)
+            var id = document.getElementById('runnerId').value
+            vue = this
+            getAPI("/api/admin/payment?number=" + id).then((data) => {
+                console.log(data)
+                if (data.success == false) {
+                    vue.paymentError = data.error
+                    setTimeout(function () {
+                        if (vue.paymentError == data.error) {
+                            vue.paymentError = null;
+                        }
+                    }, 3000);
+                } else {
+                    vue.paymentData = data.result
+                }
+            })
+        },
+        setPayment: function() {
+            if (!this.paymentData) return;
+            vue = this
+            postAPI("/api/admin/payment", {number: vue.paymentData.number}).then((data) => {
+                console.log(data)
+                if (data.success == true) this.update();
+                vue.paymentData = null;
+                document.getElementById('runnerId').value = ""
+            })
         }
     },
     mounted: function() {
         this.update()
-
-        document.getElementById("name").addEventListener("keyup", function(event) {
-            if (event.key === "Enter" || event.keyCode === 13) {
-                document.getElementById('per_round').focus()
-            }
-        });
-        
         vue = this
-        document.getElementById('per_round').addEventListener("keyup", function(event) {
-            if (event.key === "Enter" || event.keyCode === 13) {
-                vue.create()
+        setTimeout(function () {
+            if (vue.payment) {
+                document.getElementById('runnerId').addEventListener("keyup", function(event) {
+                    if (event.key === "Enter" || event.keyCode === 13) {
+                        vue.getPaymentData()
+                    }
+                });
+            } else {
+                document.getElementById("name").addEventListener("keyup", function(event) {
+                    if (event.key === "Enter" || event.keyCode === 13) {
+                        document.getElementById('per_round').focus()
+                    }
+                });
+                
+                document.getElementById('per_round').addEventListener("keyup", function(event) {
+                    if (event.key === "Enter" || event.keyCode === 13) {
+                        vue.create()
+                    }
+                });
             }
-        });
+        }, 500)
     }
 });

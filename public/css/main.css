@@ -60,6 +60,11 @@ button {
     font-size: 0.8rem;
 }
 
+.buttonSmall {
+    padding: 5px 7px;
+    border-radius: 6px;
+}
+
 .btnRed {
     background-color: lightcoral;
 }

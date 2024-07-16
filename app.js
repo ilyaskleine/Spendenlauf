@@ -118,7 +118,7 @@ app.get('/api/admin/jahrgaenge', (req, res) => {
       res.status(404).json({ message: err})
     }
     else {
-      res.json({results})
+      res.json({results: results, deletionDisabled: process.env.DISABLED_DELETION, payment: process.env.PAYMENT})
     }
   })
 })
@@ -185,6 +185,26 @@ app.put('/api/admin/round', (req, res) => {
 
 app.delete('/api/admin/round', (req, res) => {
   db.removeRound(req.body.number, err => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true})
+    }
+  })
+})
+
+app.get('/api/admin/payment', (req, res) => {
+  db.getPaymentData(req.query.number, (err, data) => {
+    if (err) {
+      res.status(500).json({success: false, error: err})
+    } else {
+      res.json({success: true, result: data})
+    }
+  })
+})
+
+app.post('/api/admin/payment', (req, res) => {
+  db.setPayed(req.body.number, err => {
     if (err) {
       res.status(500).json({success: false, error: err})
     } else {
