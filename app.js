@@ -213,11 +213,19 @@ app.post('/api/admin/payment', (req, res) => {
   })
 })
 
-app.post('/api/admin/pdf/runners', (req, res) => {
+app.post('/api/admin/pdf/results', (req, res) => {
   db.getRunnersOfClass(req.body.class, (err, results) => {
     if (err) return res.status(500).json({success: false, error: err})
     if(results < 1) return res.json({success: false, error: "No runners in class."})
-    var filename = pdf.makeRunnerPDF(results);
+    var filename = pdf.generateResultsPDF(results);
+    res.json({success: true, filename: filename})
+  })
+})
+
+app.post('/api/admin/pdf/runners', (req, res) => {
+  db.getRunnersWithClass((err, results) => {
+    if (err) return res.status(500).json({success: false, error: err})
+    var filename = pdf.generateRunnerDataPDF(results);
     res.json({success: true, filename: filename})
   })
 })

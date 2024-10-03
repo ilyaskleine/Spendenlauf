@@ -35,6 +35,10 @@ function getRunnersOfClass(classID, callback) {
     )
 }
 
+function getRunnersWithClass(callback) {
+    pool.query("SELECT class.name as class, laeufer.name, laeufer.number, laeufer.per_round, laeufer.rounds, laeufer.amount_raised, laeufer.festbetrag, laeufer.payed from class, laeufer where laeufer.class_id = class.id", callback);
+}
+
 function getRunnerStruct(callback) {
     getAllRunners((runners_err, runners) => {
         if (runners_err) return callback(runners_err, null)
@@ -290,6 +294,7 @@ module.exports = {
     getAllRuns: getAllRuns,
     getRunsWithRunners: getRunsWithRunners,
     getRunnersOfClass: getRunnersOfClass,
+    getRunnersWithClass: getRunnersWithClass,
 
     addRound: addRound,
     removeRound: removeRound,

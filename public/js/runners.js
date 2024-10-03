@@ -6,9 +6,11 @@ app = new Vue({
         selectedClass: null,
         output: null,
         fixed: false,
-        downloadFilename: null,
+        downloadFilenameClass: null,
+        downloadFilenameAll: null,
         downloadClass: null,
-        downloadLoading: false,
+        downloadLoadingClass: false,
+        downloadLoadingAll: false,
         deletionDisabled: false,
         payment: false,
         paymentError: null,
@@ -92,13 +94,23 @@ app = new Vue({
                 return "0,00"
             }
         },
-        generatePDF: function() {
+        generateClassPDF: function() {
             vue = this
-            this.downloadLoading = true
-            postAPI("/api/admin/pdf/runners", {class: this.selectedClass.id}).then((data) => {
+            this.downloadLoadingClass = true
+            postAPI("/api/admin/pdf/results", {class: this.selectedClass.id}).then((data) => {
                 if (data.sucess == false) return;
-                vue.downloadFilename = data.filename
-                vue.downloadLoading = false
+                vue.downloadFilenameClass = data.filename
+                vue.downloadLoadingClass = false
+                vue.downloadClass = vue.selectedClass
+            })
+        },
+        generateAllPDF: function() {
+            vue = this
+            this.downloadLoadingAll = true
+            postAPI("/api/admin/pdf/results", {}).then((data) => {
+                if (data.sucess == false) return;
+                vue.downloadFilenameAll = data.filename
+                vue.downloadLoadingAll = false
                 vue.downloadClass = vue.selectedClass
             })
         },

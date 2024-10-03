@@ -21,7 +21,7 @@ function formatEuro(value) {
     }
 }
 
-  function makeRunnerPDF(runners) {
+  function generateResultsPDF(runners) {
     var content = []
 
     var counter = 0;
@@ -103,7 +103,51 @@ function formatEuro(value) {
       return filename;
   }
 
-  module.exports =  {
-    makeRunnerPDF: makeRunnerPDF
-  }
+function generateRunnerDataPDF(runners) {
+    var content = [{text: 'Läuferdaten', style: 'header'}]
+    var rows = [[{text: 'Nr. 2', style: 'tableHeader'}, {text: 'Klasse', style: 'tableHeader'}, {text: 'Läufer', style: 'tableHeader'}, {text: 'Rundenbetrag', style: 'tableHeader'}, {text: 'Runden', style: 'tableHeader'}, {text: 'Gesammt (berechnet)', style: 'tableHeader'}]]
+
+    for (var runner of runners) {
+        rows.push([runner.number, runner.class, runner.name, runner.per_round, runner.rounds, runner.amount_raised])
+    }
+
+    content.push({table: {
+        body: rows
+    }})
+
+
+    var docDefinition = {
+        content: content,
+        styles: {
+            header: {
+                fontSize: 18,
+                bold: true
+            },
+            tableHeader: {
+                bold: true,
+                fontSize: 13,
+                color: 'black'
+            }
+        },
+        defaultStyle: {
+            columnGap: 20
+        }
+    
+    }
+      
+    var options = {
+        // ...
+    }
+      
+    var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+    var filename = 'runner_data.pdf';
+    pdfDoc.pipe(fs.createWriteStream('admin/pdf/' + filename));
+    pdfDoc.end();
+    return filename;
+}
+
+module.exports =  {
+    generateResultsPDF: generateResultsPDF,
+    generateRunnerDataPDF: generateRunnerDataPDF
+}
   

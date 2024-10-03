@@ -51,12 +51,19 @@
                       <td class="table-right euro" style="color: green">{{formatEuro(runner.amount_raised)}}</td>
                     </tr>
                 </table>
-                <div v-if="downloadLoading">
+                <div v-if="downloadLoadingClass">
                   <p><i>Generating... </i></p>
                 </div>
                 <div v-else>
-                  <button style="margin-top: 15px" v-on:click="generatePDF">PDF dieser Klasse generieren</button>
-                  <button style="margin-top: 15px; background-color: lightgreen;" v-if="downloadFilename && selectedClass == downloadClass"><a v-bind:href="'/admin/pdf/' + downloadFilename" v-bind:download="downloadFilename">Download</a></button>
+                  <button style="margin-top: 15px" v-on:click="generateClassPDF">PDF dieser Klasse generieren</button>
+                  <button style="margin-top: 15px; background-color: lightgreen;" v-if="downloadFilenameClass && selectedClass == downloadClass"><a v-bind:href="'/admin/pdf/' + downloadFilenameClass" v-bind:download="downloadFilenameClass">Download</a></button>
+                </div>
+                <div v-if="downloadLoadingAll">
+                  <p><i>Generating... </i></p>
+                </div>
+                <div v-else>
+                  <button style="margin-top: 15px" v-on:click="generateAllPDF">PDF aller Läuferdaten generieren</button>
+                  <button style="margin-top: 15px; background-color: lightgreen;" v-if="downloadFilenameAll"><a v-bind:href="'/admin/pdf/' + downloadFilenameAll" v-bind:download="downloadFilenameAll">Download</a></button>
                 </div>
                 <table v-if="selectedJahrgang">
                     <tr>
