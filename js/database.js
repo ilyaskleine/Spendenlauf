@@ -154,6 +154,7 @@ function getRunsWithRunners(callback) {
 // -------- ROUNDS --------
 
 function addRound(runner_number, callback) {
+return
     pool.query("SELECT festbetrag FROM laeufer WHERE number = " + pool.escape(runner_number) + ";", (err, results) => {
         if (err) return callback(err)
         if (results.length !== 1) return callback("Runner not found or not explicit.")
@@ -174,6 +175,7 @@ function addRound(runner_number, callback) {
 }
 
 function removeRound(runner_number, callback) {
+return
     pool.query("SELECT * FROM laeufer WHERE number = " + pool.escape(runner_number) + ";", (err, results) => {
         if (err) return callback(err)
         if (results.length !== 1) return callback("Runner not found or not explicit.")

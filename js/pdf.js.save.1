@@ -108,8 +108,8 @@ function generateRunnerDataPDF(runners) {
     var rows = [[{text: 'Bez.', style: 'tableHeader'}, {text: 'Nr.', style: 'tableHeader'}, {text: 'Klasse', style: 'tableHeader'}, {text: 'Läufer', style: 'tableHeader'}, {text: 'Rundenbetrag', style: 'tableHeader'}, {text: 'Runden', style: 'tableHeader'}, {text: 'Gesammt (berechnet)', style: 'tableHeader'}]]
 
     for (var runner of runners) {
-	var hasPaidString = (runner.payed ? 'X' : ' ');
-        rows.push([hasPaidString, runner.number, runner.class, runner.name, runner.per_round + ' €', runner.rounds, runner.amount_raised + ' €'])
+	payedMark = 
+        rows.push([runner.number, runner.class, runner.name, runner.per_round + ' €', runner.rounds, runner.amount_raised + ' €'])
     }
 
     content.push({table: {

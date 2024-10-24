@@ -107,7 +107,7 @@ app = new Vue({
         generateAllPDF: function() {
             vue = this
             this.downloadLoadingAll = true
-            postAPI("/api/admin/pdf/results", {}).then((data) => {
+            postAPI("/api/admin/pdf/runners", {}).then((data) => {
                 if (data.sucess == false) return;
                 vue.downloadFilenameAll = data.filename
                 vue.downloadLoadingAll = false
